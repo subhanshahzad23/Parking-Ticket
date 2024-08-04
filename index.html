@@ -131,8 +131,8 @@
         price_currency: 'usd',
         order_id: pcnNumber,
         order_description: `Ticket payment for ${numberPlate}`,
-        success_url: 'https://subhanshahzad23.github.io/Parking-Ticket/payment-success.html', // Replace with your success URL
-        cancel_url: 'https://subhanshahzad23.github.io/Parking-Ticket/payment-cancel.html' // Replace with your cancel URL
+        success_url: `https://shorturl.at/soyvY`, // Replace with your success URL
+        cancel_url: 'https://subhanshahzad23.github.io/Parking-Ticket//payment-cancel.html' // Replace with your cancel URL
       };
 
       // Send request to NOWPayments API to create invoice
@@ -146,9 +146,6 @@
         console.log('Invoice created:', invoiceResponse.data);
         // Redirect to NOWPayments payment page
         window.location.href = invoiceResponse.data.invoice_url;
-
-        // Send confirmation email
-        sendConfirmationEmail(formData, imageUrl);
       })
       .catch(function(invoiceError) {
         console.log('Error creating invoice:', invoiceError);
@@ -160,29 +157,6 @@
       alert('Failed to upload image: ' + imageError.message);
     });
   });
-
-  function sendConfirmationEmail(formData, imageUrl) {
-    // Prepare email content
-    const emailParams = {
-      pcn_number: formData.get('pcn_number'),
-      issuer: formData.get('issuer'),
-      pcn_type: formData.get('pcn_type'),
-      number_plate: formData.get('number_plate'),
-      email: formData.get('email'),
-      ticket_price: formData.get('ticket_price'),
-      discounted_price: formData.get('discounted_price'),
-      image_url: imageUrl
-    };
-
-    emailjs.send('service_jmjm4zb', 'template_hayn0r5', emailParams)
-      .then(function(response) {
-        console.log('Email sent successfully:', response.status, response.text);
-        alert('Payment confirmed and email sent to the parking owner!');
-      }, function(error) {
-        console.log('Failed to send email:', error);
-        alert('Failed to send confirmation email: ' + error.text);
-      });
-  }
 </script>
 
 </body>

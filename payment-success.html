@@ -12,7 +12,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(to right, #1d72ea 0%, #46ebdd 100%);
+            background-color: #f2f2f2;
         }
         .container {
             text-align: center;
@@ -31,6 +31,7 @@
         p {
             font-size: 1.2em;
             color: #666;
+            margin-top: 20px;
         }
         a {
             display: inline-block;
@@ -45,24 +46,6 @@
         a:hover {
             background-color: #45a049;
         }
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: #4CAF50;
-            top: -10px;
-            animation: fall linear infinite;
-            opacity: 0.7;
-        }
-        @keyframes fall {
-            to {
-                transform: translateY(100vh) rotate(360deg);
-            }
-        }
-        @keyframes fall {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(100vh) rotate(720deg); }
-        }
     </style>
 </head>
 <body>
@@ -71,19 +54,37 @@
         <p>Thank you for your payment. Your transaction has been successfully completed. A confirmation email has been sent to you.</p>
         <a href="index.html">Go back to home</a>
     </div>
-    <script>
-        function createConfetti() {
-            const confettiContainer = document.querySelector('.container');
-            for (let i = 0; i < 100; i++) {
-                const confetti = document.createElement('div');
-                confetti.classList.add('confetti');
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
-                confetti.style.backgroundColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-                confettiContainer.appendChild(confetti);
-            }
-        }
-        createConfetti();
+    <script type="text/javascript">
+      document.addEventListener("DOMContentLoaded", function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const email = urlParams.get('email');
+        const pcnNumber = urlParams.get('pcn_number');
+        const issuer = urlParams.get('issuer');
+        const pcnType = urlParams.get('pcn_type');
+        const numberPlate = urlParams.get('number_plate');
+        const ticketPrice = urlParams.get('ticket_price');
+        const discountedPrice = urlParams.get('discounted_price');
+        const imageUrl = urlParams.get('image_url');
+        
+        // Prepare email content
+        const emailParams = {
+          pcn_number: pcnNumber,
+          issuer: issuer,
+          pcn_type: pcnType,
+          number_plate: numberPlate,
+          email: email,
+          ticket_price: ticketPrice,
+          discounted_price: discountedPrice,
+          image_url: imageUrl
+        };
+
+        emailjs.send('service_jmjm4zb', 'template_hayn0r5', emailParams)
+          .then(function(response) {
+            console.log('Email sent successfully:', response.status, response.text);
+          }, function(error) {
+            console.log('Failed to send email:', error);
+          });
+      });
     </script>
 </body>
 </html>
