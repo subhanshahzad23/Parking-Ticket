@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to right, #1d72ea 0%, #46ebdd 100%);
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        h1 {
+            color: #4CAF50;
+            font-size: 1.5em;
+            margin: 0;
+        }
+        p {
+            font-size: 1.2em;
+            color: #666;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            color: white;
+            background-color: #4CAF50;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        a:hover {
+            background-color: #45a049;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #4CAF50;
+            top: -10px;
+            animation: fall linear infinite;
+            opacity: 0.7;
+        }
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(720deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Payment Successful</h1>
+        <p>Thank you for your payment. Your transaction has been successfully completed. A confirmation email has been sent to you.</p>
+        <a href="index.html">Go back to home</a>
+    </div>
+    <script>
+        function createConfetti() {
+            const confettiContainer = document.querySelector('.container');
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+                confetti.style.backgroundColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                confettiContainer.appendChild(confetti);
+            }
+        }
+        createConfetti();
+    </script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCN Query Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="background">
+        <div class="container">
+            <div class="screen">
+                <div class="screen-header">
+                    <div class="screen-header-left">
+                        <div class="screen-header-button close"></div>
+                        <div class="screen-header-button maximize"></div>
+                        <div class="screen-header-button minimize"></div>
+                    </div>
+                    <div class="screen-header-right">
+                        <div class="screen-header-ellipsis"></div>
+                        <div class="screen-header-ellipsis"></div>
+                        <div class="screen-header-ellipsis"></div>
+                    </div>
+                </div>
+                <div class="screen-body">
+                    <div class="screen-body-item left">
+                        <div class="app-title">
+                            <img src="logo.png" alt="Logo" class="app-logo">
+                        </div>
+                        <div class="app-contact">CONTACT INFO</div>
+                    </div>
+                    <div class="screen-body-item">
+                        <form id="myForm" class="app-form">
+                            <div class="app-form-group">
+                                <input class="app-form-control" placeholder="PCN Number" name="pcn_number" required>
+                            </div>
+                            <div class="app-form-group">
+                                <input class="app-form-control" placeholder="PCN issued by" name="issuer" required>
+                            </div>
+                            <div class="app-form-group">
+                                <select class="app-form-control select-option-black" name="pcn_type" required>
+                                    <option value="">PCN Type</option>
+                                    <option value="council">Council</option>
+                                    <option value="private">Private</option>
+                                </select>
+                            </div>
+                            <div class="app-form-group">
+                                <input class="app-form-control" placeholder="Number Plate" name="number_plate" required>
+                            </div>
+                            <div class="app-form-group">
+                                <input class="app-form-control" placeholder="Email Address" name="email" required>
+                            </div>
+                            <div class="app-form-group">
+                                <input class="app-form-control" placeholder="Price of Ticket" name="ticket_price" id="ticket_price" required>
+                            </div>
+                            <div class="app-form-group">
+                                <input class="app-form-control" placeholder="Discounted Price" name="discounted_price" id="discounted_price" readonly>
+                            </div>
+                            <div class="app-form-group">
+                                <input type="file" class="app-form-control" name="screenshot" id="screenshot" accept="image/*" required>
+                            </div>
+                            <div class="app-form-group buttons">
+                                <button type="button" class="app-form-button">CANCEL</button>
+                                <button type="submit" class="app-form-button">SEND</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="credits">
+                Made by
+                <a class="credits-link" href="#" target="_blank">
+                    <svg class="dribbble" viewBox="0 0 200 200">
+                        <g stroke="#ffffff" fill="none">
+                            <circle cx="100" cy="100" r="90" stroke-width="20"></circle>
+                            <path d="M62.737004,13.7923523 C105.08055,51.0454853 135.018754,126.906957 141.768278,182.963345" stroke-width="20"></path>
+                            <path d="M10.3787186,87.7261455 C41.7092324,90.9577894 125.850356,86.5317271 163.474536,38.7920951" stroke-width="20"></path>
+                            <path d="M41.3611549,163.928627 C62.9207607,117.659048 137.020642,86.7137169 189.041451,107.858103" stroke-width="20"></path>
+                        </g>
+                    </svg>
+                    Subhan
+                </a>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="text/javascript">
+  emailjs.init("Xjayr8x7rGXS1ditD"); // Replace 'YOUR_USER_ID' with your actual EmailJS user ID
+
+  document.getElementById('ticket_price').addEventListener('input', function() {
+    const ticketPrice = parseFloat(this.value);
+    if (!isNaN(ticketPrice)) {
+      document.getElementById('discounted_price').value = (ticketPrice / 2).toFixed(2);
+    } else {
+      document.getElementById('discounted_price').value = '';
+    }
+  });
+
+  document.getElementById('myForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(this);
+    const pcnNumber = formData.get('pcn_number');
+    const issuer = formData.get('issuer');
+    const pcnType = formData.get('pcn_type');
+    const numberPlate = formData.get('number_plate');
+    const email = formData.get('email');
+    const ticketPrice = formData.get('ticket_price');
+    const discountedPrice = formData.get('discounted_price');
+    const screenshot = document.getElementById('screenshot').files[0];
+
+    // Define your NOWPayments API key
+    const apiKey = 'G5D15B0-YQZ4FWG-Q8K7V2C-B6WXDPQ';
+
+    // Upload the screenshot to ImgBB
+    const imgBBApiKey = '6806e0e7c526235f03526c3b5a0b722e'; // Replace with your ImgBB API key
+    const imageFormData = new FormData();
+    imageFormData.append('image', screenshot);
+
+    axios.post(`https://api.imgbb.com/1/upload?key=${imgBBApiKey}`, imageFormData)
+    .then(function(imageResponse) {
+      const imageUrl = imageResponse.data.data.url;
+      console.log('Image uploaded:', imageUrl);
+
+      // Create invoice data
+      const invoiceData = {
+        price_amount: parseFloat(discountedPrice),
+        price_currency: 'usd',
+        order_id: pcnNumber,
+        order_description: `Ticket payment for ${numberPlate}`,
+        success_url: 'http://127.0.0.1:5500/payment-success.html', // Replace with your success URL
+        cancel_url: 'http://127.0.0.1:5500/payment-cancel.html' // Replace with your cancel URL
+      };
+
+      // Send request to NOWPayments API to create invoice
+      axios.post('https://api.nowpayments.io/v1/invoice', invoiceData, {
+        headers: {
+          'x-api-key': apiKey,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(function(invoiceResponse) {
+        console.log('Invoice created:', invoiceResponse.data);
+        // Redirect to NOWPayments payment page
+        window.location.href = invoiceResponse.data.invoice_url;
+
+        // Send confirmation email
+        sendConfirmationEmail(formData, imageUrl);
+      })
+      .catch(function(invoiceError) {
+        console.log('Error creating invoice:', invoiceError);
+        alert('Failed to create invoice: ' + invoiceError.response.data.message);
+      });
+    })
+    .catch(function(imageError) {
+      console.log('Error uploading image:', imageError);
+      alert('Failed to upload image: ' + imageError.message);
+    });
+  });
+
+  function sendConfirmationEmail(formData, imageUrl) {
+    // Prepare email content
+    const emailParams = {
+      pcn_number: formData.get('pcn_number'),
+      issuer: formData.get('issuer'),
+      pcn_type: formData.get('pcn_type'),
+      number_plate: formData.get('number_plate'),
+      email: formData.get('email'),
+      ticket_price: formData.get('ticket_price'),
+      discounted_price: formData.get('discounted_price'),
+      image_url: imageUrl
+    };
+
+    emailjs.send('service_jmjm4zb', 'template_hayn0r5', emailParams)
+      .then(function(response) {
+        console.log('Email sent successfully:', response.status, response.text);
+        alert('Payment confirmed and email sent to the parking owner!');
+      }, function(error) {
+        console.log('Failed to send email:', error);
+        alert('Failed to send confirmation email: ' + error.text);
+      });
+  }
+</script>
+
+</body>
+</html>
