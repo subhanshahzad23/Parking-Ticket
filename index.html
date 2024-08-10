@@ -69,19 +69,13 @@
                 </div>
             </div>
             <div class="credits">
-                Made by
-                <a class="credits-link" href="#" target="_blank">
-                    <svg class="dribbble" viewBox="0 0 200 200">
-                        <g stroke="#ffffff" fill="none">
-                            <circle cx="100" cy="100" r="90" stroke-width="20"></circle>
-                            <path d="M62.737004,13.7923523 C105.08055,51.0454853 135.018754,126.906957 141.768278,182.963345" stroke-width="20"></path>
-                            <path d="M10.3787186,87.7261455 C41.7092324,90.9577894 125.850356,86.5317271 163.474536,38.7920951" stroke-width="20"></path>
-                            <path d="M41.3611549,163.928627 C62.9207607,117.659048 137.020642,86.7137169 189.041451,107.858103" stroke-width="20"></path>
-                        </g>
-                    </svg>
-                    Subhan
+                <a class="credits-link" href="https://t.me/JohnDoh24" target="_blank" style="text-decoration: none; font-family: Arial, sans-serif; font-weight: 300; font-size: 16px; color: #555;">
+                    <img src="https://www.svgrepo.com/show/354443/telegram.svg" alt="Telegram Icon" width="40" height="40" style="vertical-align: middle;"/>
+                    <span style="margin-left: 10px;">John Doh</span>
                 </a>
             </div>
+            
+            
         </div>
     </div>
 
@@ -93,11 +87,12 @@
   document.getElementById('ticket_price').addEventListener('input', function() {
     const ticketPrice = parseFloat(this.value);
     if (!isNaN(ticketPrice)) {
-      document.getElementById('discounted_price').value = (ticketPrice / 2).toFixed(2);
+        document.getElementById('discounted_price').value = (ticketPrice * 0.4).toFixed(2);
     } else {
-      document.getElementById('discounted_price').value = '';
+        document.getElementById('discounted_price').value = '';
     }
-  });
+});
+
 
   document.getElementById('myForm').addEventListener('submit', function(event) {
     event.preventDefault();
