@@ -1,127 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Payment Successful</title>
     <style>
-      body,
-      html {
-        height: 100%;
-        margin: 0;
-        font-family: "Arial", sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #f2f2f2;
-      }
-      .container {
-        text-align: center;
-        background: white;
-        padding: 50px;
-        border-radius: 10px;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        position: relative;
-        overflow: hidden;
-      }
-      h1 {
-        color: #4caf50;
-        font-size: 1.5em;
-        margin: 0;
-      }
-      p {
-        font-size: 1.2em;
-        color: #666;
-        margin-top: 20px;
-      }
-      a {
-        display: inline-block;
-        margin-top: 20px;
-        padding: 10px 20px;
-        color: white;
-        background-color: #4caf50;
-        border-radius: 5px;
-        text-decoration: none;
-        transition: background-color 0.3s;
-      }
-      a:hover {
-        background-color: #45a049;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Payment Successful</h1>
-      <p>
-        Thank you for your payment. Your transaction has been successfully
-        completed. A confirmation email has been sent to you.
-      </p>
-      <a href="index.html">Go back to home</a>
-    </div>
-    <script
-      type="text/javascript"
-      src="https://cdn.emailjs.com/dist/email.min.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"
-    ></script>
-    <script type="text/javascript">
-      emailjs.init("Xjayr8x7rGXS1ditD");
-    </script>
-    <script type="text/javascript">
-      document.addEventListener("DOMContentLoaded", function () {
-        const urlParams = new URLSearchParams(window.location.search);
-
-        // Extract parameters from the URL
-        const email = urlParams.get("email");
-        const pcnNumber = urlParams.get("pcn_number");
-        const issuer = urlParams.get("issuer");
-        const pcnType = urlParams.get("pcn_type");
-        const numberPlate = urlParams.get("number_plate");
-        const ticketPrice = urlParams.get("ticket_price");
-        const discountedPrice = urlParams.get("discounted_price");
-        const imageUrl = urlParams.get("image_url");
-
-        if (
-          !email ||
-          !pcnNumber ||
-          !issuer ||
-          !pcnType ||
-          !numberPlate ||
-          !ticketPrice ||
-          !discountedPrice ||
-          !imageUrl
-        ) {
-          console.log("Missing parameters. Email will not be sent.");
-          return;
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            font-family: "Arial", sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f2f2f2;
         }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        h1 {
+            color: #4caf50;
+            font-size: 1.5em;
+            margin: 0;
+        }
+        p {
+            font-size: 1.2em;
+            color: #666;
+            margin-top: 20px;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            color: white;
+            background-color: #4caf50;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        a:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Payment Successful</h1>
+        <p>Thank you for your payment. Your transaction has been successfully completed. A confirmation email has been sent to you.</p>
+        <a href="index.html">Go back to home</a>
+    </div>
+    <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="text/javascript">
+        emailjs.init("Xjayr8x7rGXS1ditD");
 
-        // Prepare email content
-        const emailParams = {
-          pcn_number: pcnNumber,
-          issuer: issuer,
-          pcn_type: pcnType,
-          number_plate: numberPlate,
-          email: email,
-          ticket_price: ticketPrice,
-          discounted_price: discountedPrice,
-          image_url: imageUrl,
-        };
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URLSearchParams(window.location.search);
 
-        emailjs.send("service_jmjm4zb", "template_hayn0r5", emailParams).then(
-          function (response) {
-            console.log(
-              "Email sent successfully:",
-              response.status,
-              response.text
+            // Extract and decode parameters from the URL
+            const email = decodeURIComponent(urlParams.get("email"));
+            const pcnNumber = decodeURIComponent(urlParams.get("pcn_number"));
+            const issuer = decodeURIComponent(urlParams.get("issuer"));
+            const pcnType = decodeURIComponent(urlParams.get("pcn_type"));
+            const numberPlate = decodeURIComponent(urlParams.get("number_plate"));
+            const ticketPrice = decodeURIComponent(urlParams.get("ticket_price"));
+            const discountedPrice = decodeURIComponent(urlParams.get("discounted_price"));
+            const imageUrl = decodeURIComponent(urlParams.get("image_url"));
+
+            if (
+                !email ||
+                !pcnNumber ||
+                !issuer ||
+                !pcnType ||
+                !numberPlate ||
+                !ticketPrice ||
+                !discountedPrice ||
+                !imageUrl
+            ) {
+                console.log("Missing parameters. Email will not be sent.");
+                return;
+            }
+
+            // Prepare email content
+            const emailParams = {
+                pcn_number: pcnNumber,
+                issuer: issuer,
+                pcn_type: pcnType,
+                number_plate: numberPlate,
+                email: email,
+                ticket_price: ticketPrice,
+                discounted_price: discountedPrice,
+                image_url: imageUrl,
+            };
+
+            emailjs.send("service_jmjm4zb", "template_hayn0r5", emailParams).then(
+                function (response) {
+                    console.log(
+                        "Email sent successfully:",
+                        response.status,
+                        response.text
+                    );
+                },
+                function (error) {
+                    console.log("Failed to send email:", error);
+                }
             );
-          },
-          function (error) {
-            console.log("Failed to send email:", error);
-          }
-        );
-      });
+        });
     </script>
-  </body>
+</body>
 </html>
