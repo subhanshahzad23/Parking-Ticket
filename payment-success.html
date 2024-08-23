@@ -64,39 +64,31 @@
             const urlParams = new URLSearchParams(window.location.search);
 
             // Extract and decode parameters from the URL
-            const email = decodeURIComponent(urlParams.get("email"));
-            const pcnNumber = decodeURIComponent(urlParams.get("pcn_number"));
-            const issuer = decodeURIComponent(urlParams.get("issuer"));
-            const pcnType = decodeURIComponent(urlParams.get("pcn_type"));
-            const numberPlate = decodeURIComponent(urlParams.get("number_plate"));
-            const ticketPrice = decodeURIComponent(urlParams.get("ticket_price"));
-            const discountedPrice = decodeURIComponent(urlParams.get("discounted_price"));
-            const imageUrl = decodeURIComponent(urlParams.get("image_url"));
+            const email = urlParams.get("email");
+            const pcnNumber = urlParams.get("pcn_number");
+            const issuer = urlParams.get("issuer");
+            const pcnType = urlParams.get("pcn_type");
+            const numberPlate = urlParams.get("number_plate");
+            const ticketPrice = urlParams.get("ticket_price");
+            const discountedPrice = urlParams.get("discounted_price");
+            const imageUrl = urlParams.get("image_url");
 
-            if (
-                !email ||
-                !pcnNumber ||
-                !issuer ||
-                !pcnType ||
-                !numberPlate ||
-                !ticketPrice ||
-                !discountedPrice ||
-                !imageUrl
-            ) {
+            // Check if all required parameters are present
+            if (!email || !pcnNumber || !issuer || !pcnType || !numberPlate || !ticketPrice || !discountedPrice || !imageUrl) {
                 console.log("Missing parameters. Email will not be sent.");
                 return;
             }
 
             // Prepare email content
             const emailParams = {
-                pcn_number: pcnNumber,
-                issuer: issuer,
-                pcn_type: pcnType,
-                number_plate: numberPlate,
-                email: email,
-                ticket_price: ticketPrice,
-                discounted_price: discountedPrice,
-                image_url: imageUrl,
+                pcn_number: decodeURIComponent(pcnNumber),
+                issuer: decodeURIComponent(issuer),
+                pcn_type: decodeURIComponent(pcnType),
+                number_plate: decodeURIComponent(numberPlate),
+                email: decodeURIComponent(email),
+                ticket_price: decodeURIComponent(ticketPrice),
+                discounted_price: decodeURIComponent(discountedPrice),
+                image_url: decodeURIComponent(imageUrl),
             };
 
             emailjs.send("service_jmjm4zb", "template_hayn0r5", emailParams).then(
