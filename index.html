@@ -74,15 +74,13 @@
                     <span style="margin-left: 10px;">John Doh</span>
                 </a>
             </div>
-            
-            
         </div>
     </div>
 
 <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script type="text/javascript">
-  emailjs.init("Xjayr8x7rGXS1ditD"); // Replace 'YOUR_USER_ID' with your actual EmailJS user ID
+  emailjs.init("Xjayr8x7rGXS1ditD");
 
   document.getElementById('ticket_price').addEventListener('input', function() {
     const ticketPrice = parseFloat(this.value);
@@ -91,8 +89,7 @@
     } else {
         document.getElementById('discounted_price').value = '';
     }
-});
-
+  });
 
   document.getElementById('myForm').addEventListener('submit', function(event) {
     event.preventDefault();
@@ -107,18 +104,23 @@
     const discountedPrice = formData.get('discounted_price');
     const screenshot = document.getElementById('screenshot').files[0];
 
+    // Store form data in localStorage
+    localStorage.setItem('formData', JSON.stringify({
+      pcnNumber, issuer, pcnType, numberPlate, email, ticketPrice, discountedPrice
+    }));
+
     // Define your NOWPayments API key
     const apiKey = 'G5D15B0-YQZ4FWG-Q8K7V2C-B6WXDPQ';
 
     // Upload the screenshot to ImgBB
-    const imgBBApiKey = '6806e0e7c526235f03526c3b5a0b722e'; // Replace with your ImgBB API key
+    const imgBBApiKey = '6806e0e7c526235f03526c3b5a0b722e';
     const imageFormData = new FormData();
     imageFormData.append('image', screenshot);
 
     axios.post(`https://api.imgbb.com/1/upload?key=${imgBBApiKey}`, imageFormData)
     .then(function(imageResponse) {
       const imageUrl = imageResponse.data.data.url;
-      console.log('Image uploaded:', imageUrl);
+      localStorage.setItem('imageUrl', imageUrl);
 
       // Create invoice data
       const invoiceData = {
@@ -126,11 +128,10 @@
         price_currency: 'usd',
         order_id: pcnNumber,
         order_description: `Ticket payment for ${numberPlate}`,
-        success_url: `https://shorturl.at/soyvY`, // Replace with your success URL
-        cancel_url: 'https://subhanshahzad23.github.io/Parking-Ticket//payment-cancel.html' // Replace with your cancel URL
+        success_url: `index.html?status=success`, // Redirect back to index.html
+        cancel_url: 'index.html?status=cancel' // Redirect back to index.html
       };
 
-      // Send request to NOWPayments API to create invoice
       axios.post('https://api.nowpayments.io/v1/invoice', invoiceData, {
         headers: {
           'x-api-key': apiKey,
@@ -138,8 +139,6 @@
         }
       })
       .then(function(invoiceResponse) {
-        console.log('Invoice created:', invoiceResponse.data);
-        // Redirect to NOWPayments payment page
         window.location.href = invoiceResponse.data.invoice_url;
       })
       .catch(function(invoiceError) {
@@ -151,6 +150,41 @@
       console.log('Error uploading image:', imageError);
       alert('Failed to upload image: ' + imageError.message);
     });
+  });
+
+  // Check for payment status on page load
+  document.addEventListener("DOMContentLoaded", function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const status = urlParams.get('status');
+    if (status === 'success') {
+      const formData = JSON.parse(localStorage.getItem('formData'));
+      const imageUrl = localStorage.getItem('imageUrl');
+      
+      if (formData && imageUrl) {
+        // Send confirmation email
+        const emailParams = {
+          pcn_number: formData.pcnNumber,
+          issuer: formData.issuer,
+          pcn_type: formData.pcnType,
+          number_plate: formData.numberPlate,
+          email: formData.email,
+          ticket_price: formData.ticketPrice,
+          discounted_price: formData.discountedPrice,
+          image_url: imageUrl
+        };
+
+        emailjs.send('service_jmjm4zb', 'template_hayn0r5', emailParams)
+          .then(function(response) {
+            alert('Payment confirmed and email sent to the parking owner!');
+            localStorage.clear(); // Clear form data from localStorage
+          }, function(error) {
+            console.log('Failed to send email:', error);
+            alert('Failed to send confirmation email.');
+          });
+      }
+    } else if (status === 'cancel') {
+      alert('Payment was canceled.');
+    }
   });
 </script>
 
