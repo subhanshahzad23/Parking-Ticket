@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>PCN Query Form</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -70,8 +71,14 @@
             </div>
             <div class="credits">
                 <a class="credits-link" href="https://t.me/JohnDoh24" target="_blank" style="text-decoration: none; font-family: Arial, sans-serif; font-weight: 300; font-size: 16px; color: #555;">
-                    <img src="https://www.svgrepo.com/show/354443/telegram.svg" alt="Telegram Icon" width="40" height="40" style="vertical-align: middle;"/>
-                    <span style="margin-left: 10px;">John Doh</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="40" height="40" style="vertical-align: middle;">
+                    <path fill="#37AEE2" d="M128 0C57.31 0 0 57.31 0 128s57.31 128 128 128 128-57.31 128-128S198.69 0 128 0z"/>
+                    <path fill="#C8DAEA" d="M190.2 69.9l-25.7 121c-2 8.8-7.3 11-14.9 6.8l-41.2-30.4-19.8 19.2c-2.2 2.2-4.1 4.1-8.5 4.1l3.1-43.8 79.6-71.8c3.5-3.1-.7-4.9-5.4-2.3l-98.3 61.7-42.3-13.2c-9.1-2.8-9.3-9.1 2-13.4l165.3-63.8c7.5-2.8 14.1 1.8 11.6 13.2z"/>
+                    <path fill="#A9C9DD" d="M190.2 69.9l-25.7 121c-2 8.8-7.3 11-14.9 6.8l-41.2-30.4-19.8 19.2c-2.2 2.2-4.1 4.1-8.5 4.1l3.1-43.8 79.6-71.8c3.5-3.1-.7-4.9-5.4-2.3l-98.3 61.7-42.3-13.2c-9.1-2.8-9.3-9.1 2-13.4l165.3-63.8c7.5-2.8 14.1 1.8 11.6 13.2z"/>
+                    <path fill="#37AEE2" d="M104.9 160.2l65.6 48.5c4.6 2.5 8.9 1.2 10.2-4.2l14.4-68"/>
+                    <path fill="#fff" d="M104.9 160.2l65.6 48.5c4.6 2.5 8.9 1.2 10.2-4.2l14.4-68"/>
+                </svg>
+                                    <span style="margin-left: 10px;">John Doh</span>
                 </a>
             </div>
         </div>
@@ -128,8 +135,8 @@
         price_currency: 'usd',
         order_id: pcnNumber,
         order_description: `Ticket payment for ${numberPlate}`,
-        success_url: `index.html?status=success`, // Redirect back to index.html
-        cancel_url: 'index.html?status=cancel' // Redirect back to index.html
+        success_url: `https://www.l2b.site/index.html?status=success`, // Redirect back to index.html
+        cancel_url: 'https://www.l2b.site/index.html?status=cancel' // Redirect back to index.html
       };
 
       axios.post('https://api.nowpayments.io/v1/invoice', invoiceData, {
