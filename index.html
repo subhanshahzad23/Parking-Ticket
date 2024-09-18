@@ -92,7 +92,7 @@
   document.getElementById('ticket_price').addEventListener('input', function() {
     const ticketPrice = parseFloat(this.value);
     if (!isNaN(ticketPrice)) {
-        document.getElementById('discounted_price').value = (ticketPrice * 0.4).toFixed(2);
+        document.getElementById('discounted_price').value = (ticketPrice * 0.5).toFixed(2);
     } else {
         document.getElementById('discounted_price').value = '';
     }
